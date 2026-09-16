@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JSCB Bulanan — System Planning</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#e3e7eb;font-family:Arial,sans-serif;color:#18222d}.wrap{padding:10px}.tabs{display:flex;gap:5px;margin-bottom:8px;position:sticky;top:0;z-index:20}.tab{border:1px solid #777;background:#ddd;padding:10px 18px;font-weight:900;cursor:pointer;border-radius:4px}.tab.active{background:#0b3f78;color:#fff}.board{background:#fff;border:2px solid #888;box-shadow:0 2px 8px #0002}.title{background:#0b3f78;color:#fff;text-align:center;font-size:22px;font-weight:900;padding:14px}.toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:8px;background:#f2f2f2;border-bottom:1px solid #aaa}.toolbar button{padding:8px 11px;border:1px solid #777;background:#fff;border-radius:4px;font-weight:800;cursor:pointer}.toolbar button:hover{background:#eee}.status{margin-left:auto;font-size:11px;font-weight:900;padding:6px 10px;border-radius:14px}.ok{background:#dcefdc;color:#176117;border:1px solid #5b9b5b}.wait{background:#fff2cc;color:#765500;border:1px solid #b38b00}.err{background:#ffe0e0;color:#8b0000;border:1px solid #a33}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:8px;background:#f7f7f7}.kpi{border:1px solid #aaa;background:#fff;padding:9px;text-align:center}.kpi b{display:block;font-size:10px}.kpi strong{font-size:22px}.hint{padding:7px 9px;font-size:10px;color:#555}.scroll{overflow:auto;position:relative}.month{min-width:max-content;position:relative}.mhead,.mrow{display:grid;grid-template-columns:repeat(var(--days),360px);min-width:max-content}.mhead>div,.mrow>div{min-width:0}.mrow{position:relative}.mrow>div{z-index:1}.mhead{position:sticky;top:0;z-index:10}.mhead>div{border-left:1px solid #5e7893;border-right:1px solid #5e7893;border-top:0;border-bottom:0;background:#0b3f78;color:#fff;height:54px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px}.day{position:relative;flex-direction:column}.timeScale{display:grid;grid-template-columns:repeat(18,1fr);width:100%;font-size:7px;font-weight:700;margin-top:3px}.timeScale span{text-align:center;border-left:1px solid #ffffff55}.day small{display:block;font-size:8px;font-weight:700}.mrow>div{border-left:1px solid #c7cdd3;border-right:1px solid #c7cdd3;border-top:0!important;border-bottom:0!important;min-height:110px;height:var(--row-h,110px);position:relative;background:#fff}.cell{background:#fff}.sun{background:#eee!important}.hourGrid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(17,1fr);pointer-events:none;z-index:1}.hourGrid i{border-left:1px solid #d4d9de;height:100%}.hourGrid i:nth-child(2n){border-left-color:#bcc4cb}.mbarLabel{display:none}.groupBadge{position:absolute;right:4px;top:3px;background:#0b3f78;color:#fff;border-radius:8px;padding:2px 5px;font-size:7px;font-weight:900;line-height:1.1;z-index:3}.mbar .plateText{position:absolute;left:6px;top:4px;width:calc(100% - 72px);max-width:calc(100% - 72px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:900;color:#17212b;background:rgba(255,255,255,.92);border:1px solid #aeb6bf;border-radius:4px;padding:2px 4px;line-height:1.05;font-size:9px;z-index:6;text-align:left}.mbar .processText{position:absolute;left:5px;right:5px;bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-size:10px;font-weight:900;line-height:1.1;z-index:5}.mbar{position:absolute;left:1%;right:auto;height:58px;top:8px;border-radius:6px;border:1px solid #555;display:block;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:900;cursor:pointer;z-index:4;box-shadow:0 1px 2px #0002}.mbar:hover{outline:2px solid #222}.p0{background:#f4b183}.p1{background:#ffe699}.p2{background:#a9d18e}.p3{background:#f4b183}.p4{background:#9dc3e6}.p5{background:#5b9bd5}.p6{background:#76d7ea}.p7{background:#d6b48c}.p8{background:#c9b1e8}.nowLine{position:absolute;top:0;bottom:0;width:3px;background:#d60000;z-index:9;pointer-events:none;box-shadow:0 0 0 1px #fff6}.nowLine span{position:absolute;top:2px;left:4px;white-space:nowrap;background:#d60000;color:#fff;font-size:8px;font-weight:900;padding:2px 4px;border-radius:3px}.globalNowLine{position:absolute;top:54px;bottom:0;width:3px;background:#d60000;z-index:30;pointer-events:none;box-shadow:0 0 0 1px #fff8}.globalNowLine span{position:absolute;top:2px;left:4px;white-space:nowrap;background:#d60000;color:#fff;font-size:8px;font-weight:900;padding:2px 4px;border-radius:3px}.risk{border:1px solid #555!important;box-shadow:0 1px 2px #0002}.riskMark{display:none!important}.searchBox{padding:8px 10px;border:1px solid #888;border-radius:5px;min-width:220px;font-weight:800}.groupTabs{display:flex;gap:5px;flex-wrap:wrap;padding:7px 9px;background:#eef2f6;border-bottom:1px solid #aaa}.groupRow{display:flex;gap:5px;flex-wrap:wrap;align-items:center}.planningSearchRow{display:flex;gap:7px;align-items:center;width:100%;margin-top:7px}.planningSearchRow label{font-size:12px;font-weight:900;white-space:nowrap;color:#0b3f78}.planningSearchBox{flex:1;min-width:0;width:100%;font-size:14px}.clearSearchBtn{padding:8px 12px!important;white-space:nowrap}@media(max-width:600px){.planningSearchRow{align-items:stretch;flex-wrap:wrap}.planningSearchRow label{width:100%}.planningSearchBox{width:calc(100% - 72px)}.clearSearchBtn{width:65px}}
+</style>
+<style>
+.groupTab{border:1px solid #777;background:#fff;padding:7px 13px;border-radius:4px;font-weight:900;cursor:pointer}.groupTab.active{background:#0b3f78;color:#fff}.mbarLabel{padding:0 42px 0 5px}.mbar.blink,.mbarLabel.blink{animation:jscbBlink .8s ease-in-out infinite}@keyframes jscbBlink{0%,100%{opacity:1;box-shadow:0 0 0 0 #d60000}50%{opacity:.35;box-shadow:0 0 0 4px #d60000}}.legend{display:flex;gap:8px;flex-wrap:wrap;padding:7px 9px;border-top:1px solid #aaa;font-size:9px;font-weight:800}.leg{display:flex;align-items:center;gap:4px}.box{width:13px;height:13px;border:1px solid #777}.system{display:none}.spWrap{overflow:auto}.spTable{width:100%;min-width:1000px;border-collapse:collapse;font-size:10px}.spTable th,.spTable td{border:1px solid #aaa;padding:7px}.spTable th{background:#0b3f78;color:#fff;position:sticky;top:0}.spTable tr{cursor:pointer}.spTable tr:hover td{background:#eef5ff}.safe td{background:#f7fff7}.tight td{background:#fffaf0}.riskrow td{background:#fff0f0}.badge{font-weight:900;padding:3px 6px;border-radius:4px}.safeB{background:#dcefdc;color:#176117}.tightB{background:#fff0bd;color:#765500}.riskB{background:#ffd5d5;color:#8b0000}.priority{font-size:16px;font-weight:900}.empty{text-align:center;padding:25px;color:#777}.modalBg{display:none;position:fixed;inset:0;background:#0008;z-index:100;align-items:center;justify-content:center;padding:12px}.modal{background:#fff;width:min(900px,100%);max-height:90vh;overflow:auto;border-radius:8px}.modalHead{background:#0b3f78;color:#fff;padding:12px;font-weight:900;display:flex;justify-content:space-between;align-items:center}.modalHead button{background:#d60000;color:#fff;border:1px solid #fff;padding:6px 10px;font-weight:900}.modalBody{padding:12px}.summaryGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}.summaryGrid div{border:1px solid #bbb;padding:7px;background:#f7f7f7;font-size:10px}.process{display:grid;grid-template-columns:145px 75px 1fr 75px;gap:6px;align-items:center;border:1px solid #bbb;margin:5px 0;padding:7px;font-size:10px}.process b{color:#0b3f78}.note{font-size:9px;color:#666}.danger{color:#a00000;font-weight:900}@media(max-width:700px){.kpis,.summaryGrid{grid-template-columns:repeat(2,1fr)}.title{font-size:17px}.process{grid-template-columns:110px 65px 1fr 65px;min-width:600px}}
+
+.tvModeBtn{position:fixed;left:12px;bottom:12px;z-index:5000;border:1px solid #555;background:#0b3f78;color:#fff;border-radius:7px;padding:10px 14px;font-weight:900;font-size:12px;box-shadow:0 3px 10px #0004;cursor:pointer}.tvModeBtn:hover{background:#08335f}
+body.tv-mode{background:#000;overflow:hidden}.tv-mode .wrap{height:100vh;padding:0;display:flex;flex-direction:column}.tv-mode .tabs{display:none}.tv-mode #JSCB{display:flex!important;flex:1;min-height:0;height:100vh;border:0;box-shadow:none;flex-direction:column}.tv-mode #JSCB .title{flex:0 0 auto;padding:9px 12px;font-size:20px}.tv-mode #JSCB .toolbar{flex:0 0 auto;padding:5px 8px}.tv-mode #JSCB .kpis{flex:0 0 auto;padding:4px;gap:4px}.tv-mode #JSCB .kpi{padding:4px}.tv-mode #JSCB .kpi strong{font-size:17px}.tv-mode #JSCB .hint{flex:0 0 auto;padding:4px 8px;font-size:9px}.tv-mode #JSCB .scroll{flex:1;min-height:0;overflow:auto}.tv-mode #JSCB .legend{flex:0 0 auto;padding:4px 8px;max-height:32px;overflow:hidden}.tv-mode #monthBoard{min-height:0}.tv-mode .mrow>div{min-height:110px}.tv-mode .mbar{height:46px}.tv-mode .mbar .plateText{font-size:7px;top:3px;left:4px;width:calc(100% - 58px);max-width:calc(100% - 58px)}.tv-mode .mbar .processText{font-size:8px;bottom:4px;left:4px;right:4px}.tv-mode .mbar .groupBadge{font-size:6px;top:2px;right:3px}.tv-mode .mhead>div{height:50px}.tv-mode .timeScale{font-size:6px}.tv-mode .tvHide{display:none!important}
+@media (max-height:700px){.tv-mode #JSCB .title{font-size:16px;padding:5px}.tv-mode #JSCB .toolbar{padding:3px 6px}.tv-mode #JSCB .hint{display:none}.tv-mode #JSCB .legend{display:none}.tv-mode .mrow>div{height:130px}.tv-mode .mbar{height:42px}.tv-mode .mbar{top:6px}.tv-mode .mbar .plateText{font-size:6px;width:calc(100% - 50px);max-width:calc(100% - 50px)}.tv-mode .mbar .processText{font-size:7px;left:3px;right:3px;bottom:3px}.tv-mode .mhead>div{height:45px}}
+</style>
+
+
+<style>
+/* MANUAL PLAN FIX: kedua input tanggal/jam selalu terlihat dan dapat diedit di HP */
+.process{grid-template-columns:145px 75px minmax(230px,1fr) minmax(230px,1fr)!important;}
+@media(max-width:700px){.modal{width:100%;max-height:92vh}.modalBody{overflow-x:auto}.process{grid-template-columns:105px 65px 230px 230px!important;min-width:660px!important}.revDate{height:40px;font-size:12px!important}.replanBtn{position:sticky;left:0;z-index:5}}
+</style>
+
+<style>
+/* MOBILE: revisi plan harus benar-benar bisa diedit tanpa scroll horizontal */
+@media(max-width:700px){
+  .modal{width:calc(100vw - 20px);max-height:92vh;}
+  .modalBody{overflow-x:hidden;}
+  .process{grid-template-columns:1fr 1fr!important;min-width:0!important;width:100%;gap:8px;}
+  .process b{grid-column:1;}
+  .process>span{grid-column:2;text-align:right;}
+  .process label{grid-column:1 / -1;}
+  .revDate{min-width:0!important;width:100%;height:42px;font-size:12px!important;}
+  .replanBtn{width:100%;font-size:12px;padding:10px;}
+}
+.manualSaved{position:fixed;right:14px;bottom:14px;z-index:10000;background:#176117;color:#fff;padding:9px 13px;border-radius:6px;font-weight:900;box-shadow:0 3px 12px #0004;}
+</style>
+
+<style>
+.approveBtn,.revBtn,.replanBtn{border:1px solid #555;border-radius:4px;padding:6px 9px;font-weight:900;cursor:pointer}.approveBtn{background:#dcefdc;color:#176117}.revBtn{background:#fff0bd;color:#765500}.replanBtn{background:#0b3f78;color:#fff}.controllerBar{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.revInput{width:62px;padding:4px;font-weight:900;border:1px solid #888;border-radius:3px}.revDate{width:100%;min-width:205px;padding:6px;font-weight:800;border:1px solid #888;border-radius:3px;background:#fff}.process label{display:flex;flex-direction:column;gap:3px}.process label small{font-weight:900;color:#0b3f78}.process{min-height:48px}
+</style>
+
+<style id="jscb-final-layout-fix">
+/* FINAL JSCB LAYOUT: continuous vertical time grid + plate left of bar */
+#monthBoard{position:relative;min-width:max-content;background:#fff}
+.jscbGridLayer{position:absolute;left:0;right:0;top:54px;bottom:0;display:flex;pointer-events:none;z-index:0}
+.jscbGridDay{position:relative;width:360px;min-width:360px;height:100%;border-right:2px solid #9aa3ab}
+.jscbGridDay i{position:absolute;top:0;bottom:0;width:1px;background:#d3d8dd}
+.jscbGridDay i.major{width:2px;background:#b8c0c7}
+.mrow{position:relative;z-index:1;display:grid;grid-template-columns:repeat(var(--days),360px);min-width:max-content}
+.mrow>div{background:transparent!important;border:0!important;min-width:0;position:relative;z-index:1}
+.mrow>div.sun{background:rgba(235,235,235,.28)!important}
+.hourGrid{display:none!important}
+.mbar{height:58px;overflow:visible!important;border:1px solid #555;z-index:4}
+.mbar .plateText{position:absolute;right:calc(100% + 5px);left:auto;top:50%;transform:translateY(-50%);width:88px;max-width:88px;padding:3px 4px;background:#fff;border:1px solid #aeb6bf;border-radius:4px;line-height:1.05;font-size:9px;font-weight:900;color:#17212b;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:7;box-shadow:0 1px 2px #0002}
+.mbar .groupBadge{right:4px;top:4px;font-size:7px;z-index:8}
+.mbar .processText{left:5px;right:5px;top:50%;bottom:auto;transform:translateY(-5%);font-size:9px;line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:6}
+.globalNowLine{z-index:30!important;top:54px!important;bottom:0!important;width:3px!important}
+@media(max-width:700px){
+  .mbar{height:58px}
+  .mbar .plateText{width:82px;max-width:82px;font-size:8px;right:calc(100% + 4px)}
+  .mbar .groupBadge{font-size:6px;top:3px;right:3px}
+  .mbar .processText{font-size:8px;left:3px;right:3px}
+}
+.tv-mode .mbar{height:50px}
+.tv-mode .mbar .plateText{width:72px;max-width:72px;font-size:7px;right:calc(100% + 3px)}
+.tv-mode .mbar .processText{font-size:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tabs">
+<button id="tabPlanning" class="tab active" onclick="showTab('PLANNING',this)">SYSTEM PLANNING</button>
+<button id="tabJscb" class="tab" onclick="showTab('JSCB',this)">JSCB BULANAN</button>
+</div>
+<section id="PLANNING" class="board">
+<div class="title">SYSTEM PLANNING — REKOMENDASI URUTAN KERJA</div>
+<div class="toolbar"><button onclick="loadData()">↻ UPDATE DATABASE</button><button onclick="rebuild()">⚙ HITUNG ULANG PLAN</button><span id="spStatus" class="status wait">🟡 BELUM TERHUBUNG</span></div><div id="planningGroups" class="groupTabs"><div class="groupRow"><button class="groupTab active" data-damage="LIGHT" onclick="selectDamage('LIGHT',this)">LIGHT</button><button class="groupTab" data-damage="MEDIUM" onclick="selectDamage('MEDIUM',this)">MEDIUM</button><button class="groupTab" data-damage="HEAVY" onclick="selectDamage('HEAVY',this)">HEAVY</button></div><div class="planningSearchRow"><label for="planningSearch">🔎 CARI NO POLISI</label><input id="planningSearch" class="searchBox planningSearchBox" type="search" autocomplete="off" placeholder="Contoh: B 1482 DYQ" oninput="setPlanningSearch(this.value)"><button class="clearSearchBtn" onclick="clearPlanningSearch()">✕ CLEAR</button></div></div>
+<div id="spKpis" class="kpis"></div>
+<div id="spHint" class="hint">Menunggu database...</div>
+<div class="spWrap"><table class="spTable"><thead><tr><th>PRIORITAS</th><th>NO POLISI</th><th>GROUP</th><th>KERUSAKAN</th><th>ACTUAL IN</th><th>EST FINISH</th><th>PLAN FINISH</th><th>SLACK</th><th>REKOMENDASI</th><th>APPROVAL CONTROLLER</th></tr></thead><tbody id="spBody"></tbody></table></div>
+</section>
+<section id="JSCB" class="board" style="display:none">
+<div class="title">JOB SCHEDULING CONTROL BOARD — MONTHLY PLAN</div>
+<div class="toolbar"><button onclick="monthPrev()">◀ BULAN</button><b id="monthLabel">-</b><button onclick="monthNext()">BULAN ▶</button><button onclick="monthToday()">BULAN INI</button><button onclick="loadData()">↻ UPDATE DATABASE</button><span id="jscbStatus" class="status wait">🟡 BELUM TERHUBUNG</span></div><div id="jscbGroups" class="groupTabs"><button class="groupTab active" data-damage="LIGHT" onclick="selectDamage('LIGHT',this)">LIGHT</button><button class="groupTab" data-damage="MEDIUM" onclick="selectDamage('MEDIUM',this)">MEDIUM</button><button class="groupTab" data-damage="HEAVY" onclick="selectDamage('HEAVY',this)">HEAVY</button><input id="plateSearch" class="searchBox" placeholder="🔎 Cari No Polisi..." oninput="setPlateSearch(this.value)"><button onclick="clearPlateSearch()">✕ CLEAR</button></div>
+<div id="jscbKpis" class="kpis"></div><div class="hint">JSCB hanya menampilkan hasil dari SYSTEM PLANNING. Klik bar untuk melihat rencana mulai sampai selesai setiap proses.</div>
+<div class="scroll"><div id="monthBoard" class="month"></div></div>
+<div class="legend"><span class="leg"><i class="box p0"></i>PANEL REPAIR</span><span class="leg"><i class="box p1"></i>PUTTY</span><span class="leg"><i class="box p2"></i>SURFACER</span><span class="leg"><i class="box p3"></i>PAINTING</span><span class="leg"><i class="box p4"></i>POLISHING</span><span class="leg"><i class="box p5"></i>REASSEMBLY</span><span class="leg"><i class="box p6"></i>WASHING/FINISHING</span><span class="leg"><i class="box p7"></i>FINAL INSPECTION</span><span class="leg"><i class="box risk"></i>AT RISK (garis merah)</span></div>
+</section>
+</div>
+<button id="tvModeBtn" class="tvModeBtn" onclick="toggleTVMode()">📺 TV MODE</button>
+<div id="modalBg" class="modalBg" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modalHead"><span id="modalTitle">PLAN</span><button onclick="closeModal()">TUTUP</button></div><div id="modalBody" class="modalBody"></div></div></div>
+<script>
+const API='https://script.google.com/macros/s/AKfycbwwsn8Ic-sRsXlGinC-OyTUVwKnJVstwoFefxmqx_2qpxvyiNapp3y2VqRKV859VFZq/exec';
+const PROC=[['PANEL REPAIR',[1]],['PUTTY',[2]],['SURFACER',[3]],['PAINTING',[4]],['POLISHING',[5]],['REASSEMBLY',[6]],['WASHING/FINISHING',[7]],['FINAL INSPECTION',[8]]];
+const DUR={LIGHT:{},MEDIUM:{},HEAVY:{}};
+PROC.forEach(([name])=>{DUR.LIGHT[name]=2;DUR.MEDIUM[name]=4;DUR.HEAVY[name]=6;});
+const STALLS=['PANEL REPAIR','PUTTY','SURFACER','PAINTING','POLISHING','REASSEMBLY','WASHING/FINISHING','FINAL INSPECTION'];
+const REVISION_VERSION='v4-duration-2-4-6-timefix';
+const REVISION_KEY='jscb_process_revisions_'+REVISION_VERSION;
+function storageGet(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
+function storageSet(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){return false}}
+let rows=[],plans=[],currentDamage='LIGHT',plateSearch='',planningSearch='',approvals=storageGet('jscb_controller_approval',{}),revisions=storageGet(REVISION_KEY,{}),monthDate=new Date(new Date().getFullYear(),new Date().getMonth(),1),loading=false;
+const $=id=>document.getElementById(id); const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function parseDate(v){if(!v)return null;let d=new Date(v);return isNaN(d)?null:d}
+function fmt(d){let x=parseDate(d);return x?x.toLocaleString('id-ID',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'-'}
+function setWorkStart(d){d.setHours(8,0,0,0);return d}
+function setWorkEnd(d){d.setHours(16,30,0,0);return d}
+function workStart(v){
+  let d=parseDate(v)||new Date();
+  d=new Date(d.getTime());
+  if(d.getDay()===0){d.setDate(d.getDate()+1);return setWorkStart(d)}
+  const mins=d.getHours()*60+d.getMinutes();
+  if(mins<8*60)return setWorkStart(d);
+  if(mins>=16*60+30){d.setDate(d.getDate()+1);return setWorkStart(d)}
+  if(mins>=12*60 && mins<13*60)d.setHours(13,0,0,0);
+  return d;
+}
+function workAdd(v,h){
+  let d=workStart(v), remaining=Math.max(0,Number(h)||0)*60;
+  while(remaining>1e-7){
+    if(d.getDay()===0){d.setDate(d.getDate()+1);setWorkStart(d);continue}
+    let mins=d.getHours()*60+d.getMinutes();
+    if(mins<8*60){setWorkStart(d);continue}
+    if(mins>=16*60+30){d.setDate(d.getDate()+1);setWorkStart(d);continue}
+    if(mins>=12*60 && mins<13*60){d.setHours(13,0,0,0);continue}
+    const endMin=(mins<12*60)?12*60:16*60+30;
+    const available=endMin-mins;
+    const take=Math.min(remaining,available);
+    d=new Date(d.getTime()+take*60000);
+    remaining-=take;
+  }
+  return d;
+}
+function workSub(v,h){
+  let d=parseDate(v)||new Date(), remaining=Math.max(0,Number(h)||0)*60;
+  d=new Date(d.getTime());
+  while(remaining>1e-7){
+    if(d.getDay()===0){d.setDate(d.getDate()-1);setWorkEnd(d);continue}
+    let mins=d.getHours()*60+d.getMinutes();
+    if(mins>16*60+30){setWorkEnd(d);mins=16*60+30}
+    if(mins<=8*60){d.setDate(d.getDate()-1);setWorkEnd(d);continue}
+    if(mins>12*60 && mins<13*60){d.setHours(12,0,0,0);mins=12*60}
+    if(mins>13*60){
+      const available=mins-13*60;
+      const take=Math.min(remaining,available);
+      d=new Date(d.getTime()-take*60000);remaining-=take;continue;
+    }
+    if(mins>8*60 && mins<=12*60){
+      const available=mins-8*60;
+      const take=Math.min(remaining,available);
+      d=new Date(d.getTime()-take*60000);remaining-=take;continue;
+    }
+    if(mins===13*60){d.setHours(12,0,0,0);continue}
+    if(mins===12*60){d.setHours(8,0,0,0);continue}
+    d.setDate(d.getDate()-1);setWorkEnd(d);
+  }
+  return d;
+}
+function mode(u){
+  const v=String(u?.kerusakan||u?.KERUSAKAN||u?.kategori||u?.KATEGORI||'').toUpperCase().trim();
+  if(v.includes('LIGHT')) return 'LIGHT';
+  if(v.includes('MEDIUM')) return 'MEDIUM';
+  if(v.includes('HEAVY')) return 'HEAVY';
+  return '';
+}
+function progressIndex(u){let p=String(u.progress||u.PROGRESS||'').toUpperCase().trim();let m=p.match(/^(?:0?)(\d{1,2})[\.\-]?/);return m?Number(m[1]):0}
+function currentProcess(u){let n=progressIndex(u);if(!n)return'PANEL REPAIR';if(n<=2)return'PANEL REPAIR';if(n<=4)return'PUTTY';if(n<=6)return'SURFACER';if(n<=8)return'PAINTING';if(n<=10)return'POLISHING';if(n<=12)return'REASSEMBLY';if(n<=13)return'WASHING/FINISHING';if(n<=15)return'FINAL INSPECTION';return''}
+function normalize(r){return r.map(x=>{let nopol=String(x.noPolisi||x['NO POLISI']||x.nopol||'').trim();let actual=x.actualIn||x['TANGGAL ACTUAL IN']||x.tglActualIn||x['ACTUAL IN']||x.tglSpp||x['TGL SPP']||'';let finish=x.estFinish||x['EST FINISH']||x.janjiSelesai||'';return Object.assign({},x,{nopol,actualIn:actual,janjiSelesai:finish,kerusakan:String(x.kerusakan||x.KERUSAKAN||'').toUpperCase().trim(),group:String(x.group||x.GROUP||''),progress:x.progress||x.PROGRESS||'',status:x.status||x.STATUS||''})})}
+function eligible(u){return !!(u.nopol&&mode(u)&&parseDate(u.actualIn)&&parseDate(u.janjiSelesai)&&currentProcess(u))&&!/^(17[\.\-]?DELIVERY|DELIVERY)$/i.test(String(u.progress||''))}
+function reserve(free,job){let out=[];for(const s of free){if(job.end<=s.start||job.start>=s.end){out.push(s);continue}if(job.start>s.start)out.push({start:s.start,end:job.start});if(job.end<s.end)out.push({start:job.end,end:s.end})}return out}
+function latestFit(free,end,h){for(const s of free.slice().sort((a,b)=>b.end-a.end)){let e=s.end<end?s.end:end;let st=workSub(e,h);if(st>=s.start)return{start:st,end:e}}return null}
+function getDur(u,proc){const cat=mode(u);return DUR[cat]?.[proc]||0}
+function revKey(nopol,process){return (nopol||'')+'|'+process}
+function localInputValue(v){const d=parseDate(v);if(!d)return '';const pad=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`}
+function manualRevision(nopol,process){return revisions[revKey(nopol,process)]||null}
+function approvalState(nopol){return approvals[nopol]||'PENDING'}
+function saveApproval(nopol,state){approvals[nopol]=state;storageSet('jscb_controller_approval',approvals);}
+function buildPlan(list){
+ const now=new Date();
+ const sorted=list.map(u=>{
+   let st=workStart(u.actualIn),total=0,cur=currentProcess(u),idx=PROC.findIndex(p=>p[0]===cur);
+   for(let i=Math.max(0,idx);i<PROC.length;i++) total+=getDur(u,PROC[i][0])||0;
+   let base=workAdd(st,total),dl=parseDate(u.janjiSelesai),ai=parseDate(u.actualIn);
+   const overdueHours=dl&&now>dl?(now-dl)/3600000:0;
+   const overdue=overdueHours>0;
+   return Object.assign({},u,{_total:total,_baseFinish:base,_baseSlack:dl?(dl-base)/3600000:Infinity,_overdueHours:overdueHours,_overdue:overdue});
+ }).sort((a,b)=>{
+   // PRIORITAS: unit yang sudah melewati EST FINISH dikerjakan lebih dulu.
+   // Semakin lama overdue, semakin tinggi prioritas.
+   if(a._overdue!==b._overdue) return a._overdue?-1:1;
+   if(a._overdue && b._overdue && a._overdueHours!==b._overdueHours) return b._overdueHours-a._overdueHours;
+   // Untuk unit yang belum overdue: deadline terdekat lebih dulu.
+   const ad=parseDate(a.janjiSelesai),bd=parseDate(b.janjiSelesai);
+   if(ad&&bd&&ad-bd!==0) return ad-bd;
+   if(a._baseSlack!==b._baseSlack) return a._baseSlack-b._baseSlack;
+   // Tie-breaker: unit yang lebih lama masuk lebih dulu.
+   const aa=parseDate(a.actualIn),ba=parseDate(b.actualIn);
+   return (aa&&ba)?aa-ba:0;
+ });
+ const busy={};PROC.forEach(p=>busy[p[0]]=p[1].map(stall=>({stall,free:[{start:new Date('2025-01-01T00:00:00'),end:new Date('2035-01-01T00:00:00')}]})));
+ return sorted.map((u,ri)=>{
+   const deadline=parseDate(u.janjiSelesai),actual=parseDate(u.actualIn),idx=Math.max(0,PROC.findIndex(p=>p[0]===currentProcess(u))),rev=[];let latest=deadline;
+   for(let i=PROC.length-1;i>=idx;i--){let proc=PROC[i][0],h=getDur(u,proc)||0;if(!h)continue;let best=null,bestR=null;for(const r of busy[proc]){let c=latestFit(r.free,latest,h);if(c&&(!best||c.end>best.end)){best=c;bestR=r}}if(!best){best={start:workSub(latest,h),end:latest};bestR=busy[proc][0]}bestR.free=reserve(bestR.free,best);rev.push({process:proc,stall:bestR.stall,start:best.start.toISOString(),end:best.end.toISOString(),hours:h}) ;latest=best.start}
+   let jobs=rev.reverse();let first=jobs.length?parseDate(jobs[0].start):null;
+   if(first&&first<actual){let cur=workStart(actual),shifted=[];for(const j of jobs){let st=cur,en=workAdd(st,j.hours);shifted.push(Object.assign({},j,{start:st.toISOString(),end:en.toISOString(),shifted:true}));cur=en}jobs=shifted}
+   // Terapkan revisi Controller berupa TANGGAL + JAM mulai/selesai per proses. Durasi sistem tidak diedit.
+   let manualIssues=[];
+   jobs=jobs.map((j,i)=>{const r=manualRevision(u.nopol,j.process);if(!r||!r.start||!r.end)return j;const st=parseDate(r.start),en=parseDate(r.end);if(!st||!en||en<=st){manualIssues.push(j.process+' tanggal/jam tidak valid');return j}return Object.assign({},j,{start:st.toISOString(),end:en.toISOString(),manual:true})});
+   for(let i=0;i<jobs.length;i++){const st=parseDate(jobs[i].start),en=parseDate(jobs[i].end);if(st<actual)manualIssues.push(jobs[i].process+' sebelum ACTUAL IN');if(en>deadline)manualIssues.push(jobs[i].process+' melewati EST FINISH');if(i>0){const prevEnd=parseDate(jobs[i-1].end);if(st<prevEnd)manualIssues.push(jobs[i].process+' mulai sebelum proses sebelumnya selesai')}}
+   let pf=jobs.length?parseDate(jobs[jobs.length-1].end):deadline,slack=(deadline-pf)/3600000,atRisk=slack<0||manualIssues.length>0,tight=!atRisk&&slack<=4;
+   return Object.assign({},u,{rank:ri+1,current:currentProcess(u),jobs,planFinish:pf.toISOString(),slack,atRisk,tight,recommendation:atRisk?'🔴 RISK — tidak cukup waktu':tight?'🟠 TIGHT — slack ≤ 4 jam':'🟢 REKOMENDASI SISTEM',approval:approvalState(u.nopol)});
+ });
+}
+function rebuild(){plans=buildPlan(rows.filter(u=>eligible(u)&&mode(u)===currentDamage));renderPlanning();renderJSCB()}
+function selectDamage(damage,btn){currentDamage=damage;document.querySelectorAll('.groupTab').forEach(b=>b.classList.toggle('active',b.dataset.damage===damage));rebuild()}
+let searchSoundState=false;
+function playSearchFoundSound(){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;
+    const ctx=new AC();
+    const now=ctx.currentTime;
+    const osc=ctx.createOscillator(), gain=ctx.createGain();
+    osc.type='sine';
+    osc.frequency.setValueAtTime(880,now);
+    osc.frequency.setValueAtTime(1174.66,now+0.09);
+    gain.gain.setValueAtTime(0.0001,now);
+    gain.gain.exponentialRampToValueAtTime(0.16,now+0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+0.24);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(now); osc.stop(now+0.25);
+    osc.onended=()=>{try{ctx.close()}catch(e){}};
+  }catch(e){}
+}
+function setPlateSearch(v){
+  const next=String(v||'').trim().toUpperCase();
+  const nextNorm=next.replace(/[^A-Z0-9]/g,'');
+  plateSearch=next;
+  const hit=!!nextNorm && rows.some(u=>String(u.nopol||'').toUpperCase().replace(/[^A-Z0-9]/g,'').includes(nextNorm) && eligible(u) && mode(u)===currentDamage);
+  if(hit && !searchSoundState)playSearchFoundSound();
+  searchSoundState=hit;
+  renderJSCB();
+}
+function clearPlateSearch(){plateSearch='';searchSoundState=false;if($('plateSearch'))$('plateSearch').value='';renderJSCB()}
+function searchHit(nopol){if(!plateSearch)return false;return String(nopol||'').toUpperCase().replace(/[^A-Z0-9]/g,'').includes(plateSearch.replace(/[^A-Z0-9]/g,''))}
+function setStatus(id,cls,text){$(id).className='status '+cls;$(id).textContent=text}
+function loadData(){
+  if(loading)return;
+  loading=true;
+  setStatus('spStatus','wait','🟡 MENGHUBUNGKAN DATABASE…');
+  setStatus('jscbStatus','wait','🟡 MENGHUBUNGKAN DATABASE…');
+  const cb='jscb_month_cb_'+Date.now();
+  const s=document.createElement('script');
+  let done=false;
+  let timer=setTimeout(()=>finish({success:false,error:'Timeout koneksi API > 60 detik. Coba tekan UPDATE DATABASE lagi.'}),60000);
+  function cleanup(){
+    clearTimeout(timer);
+    try{delete window[cb]}catch(e){}
+    if(s.parentNode)s.parentNode.removeChild(s);
+    loading=false;
+  }
+  function finish(res){
+    if(done)return;
+    done=true;
+    if(!res||!res.success){
+      const msg=(res&&res.error)||(res&&res.message)||'Response API tidak valid';
+      cleanup();
+      setStatus('spStatus','err','🔴 DATABASE ERROR: '+msg);
+      setStatus('jscbStatus','err','🔴 DATABASE ERROR: '+msg);
+      $('spHint').textContent='API gagal dibaca. Tekan UPDATE DATABASE untuk mencoba lagi.';
+      return;
+    }
+    try{
+      rows=normalize(Array.isArray(res.data)?res.data:[]);
+      plans=buildPlan(rows.filter(u=>eligible(u)&&mode(u)===currentDamage));
+      setStatus('spStatus','ok','🟢 TERHUBUNG — '+rows.length+' UNIT');
+      setStatus('jscbStatus','ok','🟢 TERHUBUNG — '+rows.length+' UNIT');
+      renderPlanning();
+      renderJSCB();
+    }catch(err){
+      setStatus('spStatus','err','🔴 ERROR PLAN: '+err.message);
+      setStatus('jscbStatus','err','🔴 ERROR PLAN: '+err.message);
+    }finally{
+      cleanup();
+    }
+  }
+  window[cb]=finish;
+  s.onerror=()=>finish({success:false,error:'Script API tidak dapat dimuat. Pastikan Web App Apps Script masih aktif dan aksesnya Anyone.'});
+  s.src=API+'?action=jscb&callback='+encodeURIComponent(cb)+'&_='+Date.now();
+  document.head.appendChild(s);
+}
+function setPlanningSearch(v){planningSearch=String(v||'').trim().toUpperCase();renderPlanning()}
+function clearPlanningSearch(){planningSearch='';if($('planningSearch'))$('planningSearch').value='';renderPlanning()}
+function planningSearchHit(nopol){if(!planningSearch)return true;const q=planningSearch.replace(/[^A-Z0-9]/g,'');if(!q)return true;return String(nopol||'').toUpperCase().replace(/[^A-Z0-9]/g,'').includes(q)}
+function renderPlanning(){let a=plans.filter(x=>planningSearchHit(x.nopol));let risk=a.filter(x=>x.atRisk).length,tight=a.filter(x=>x.tight).length;$('spKpis').innerHTML=[['TOTAL PLAN',a.length],['PRIORITAS #1',a[0]?.nopol||'-'],['TIGHT',tight],['RISK',risk]].map(x=>`<div class="kpi"><b>${x[0]}</b><strong>${x[1]}</strong></div>`).join('');$('spHint').innerHTML=`KERUSAKAN AKTIF: <b>${esc(currentDamage)}</b>${planningSearch?` · PENCARIAN: <b>${esc(planningSearch)}</b>`:''} · Planning memprioritaskan unit <b>yang sudah melewati EST FINISH</b>; semakin lama terlambat semakin tinggi prioritas. Unit yang belum terlambat diurutkan berdasarkan EST FINISH terdekat, lalu ACTUAL IN. Durasi per proses: <b>LIGHT 2 jam</b>, <b>MEDIUM 4 jam</b>, <b>HEAVY 6 jam</b>. <b>JSCB hanya menampilkan hasil plan ini.</b>`;$('spBody').innerHTML=a.map(x=>`<tr class="${x.atRisk?'riskrow':x.tight?'tight':'safe'}" onclick="openPlan('${esc(x.nopol)}')"><td class="priority">#${x.rank}</td><td><b>${esc(x.nopol)}</b></td><td>${esc(x.group)}</td><td>${esc(mode(x))}</td><td>${fmt(x.actualIn)}</td><td>${fmt(x.janjiSelesai)}</td><td>${fmt(x.planFinish)}</td><td><span class="badge ${x.atRisk?'riskB':x.tight?'tightB':'safeB'}">${x.slack>=0?'+':''}${x.slack.toFixed(1)} jam</span></td><td>${esc(x.recommendation)}</td><td><button class="approveBtn" onclick="event.stopPropagation();setApproval('${esc(x.nopol)}','APPROVED')">✓ APPROVE</button> <button class="revBtn" onclick="event.stopPropagation();openPlan('${esc(x.nopol)}')">REVIEW</button><br><span class="badge ${x.approval==='APPROVED'?'safeB':'tightB'}">${x.approval}</span></td></tr>`).join('')||`<tr><td colspan="10" class="empty">${planningSearch?'No Polisi tidak ditemukan di kategori '+esc(currentDamage)+'.':'Tidak ada unit dengan data ACTUAL IN, EST FINISH dan KERUSAKAN yang lengkap.'}</td></tr>`}
+function renderJSCB(){
+  const y=monthDate.getFullYear(), m=monthDate.getMonth(), days=new Date(y,m+1,0).getDate();
+  $('monthLabel').textContent=new Date(y,m,1).toLocaleDateString('id-ID',{month:'long',year:'numeric'}).toUpperCase();
+  $('jscbKpis').innerHTML=[['KERUSAKAN',currentDamage],['UNIT PLAN',plans.length],['APPROVED',plans.filter(x=>approvalState(x.nopol)==='APPROVED').length],['TIGHT',plans.filter(x=>x.tight).length],['RISK',plans.filter(x=>x.atRisk).length]].map(x=>`<div class="kpi"><b>${x[0]}</b><strong>${x[1]}</strong></div>`).join('');
+
+  let head=`<div class="mhead" style="--days:${days}">`;
+  for(let d=1;d<=days;d++){
+    const z=new Date(y,m,d); let ticks='';
+    for(let i=0;i<18;i++){
+      const total=8*60+i*30,hh=Math.floor(total/60),mm=total%60;
+      ticks+=`<span>${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}</span>`;
+    }
+    head+=`<div class="day"><b>${String(d).padStart(2,'0')}</b><small>${z.toLocaleDateString('id-ID',{weekday:'short'}).toUpperCase()}</small><div class="timeScale">${ticks}</div></div>`;
+  }
+  head+='</div>';
+
+  // One continuous vertical grid across the complete JSCB body.
+  let grid=`<div class="jscbGridLayer" aria-hidden="true">`;
+  for(let d=0;d<days;d++){
+    grid+='<div class="jscbGridDay">';
+    for(let i=0;i<=17;i++){
+      const left=(i/17*100);
+      grid+=`<i class="${i===0||i===17?'major':''}" style="left:${left}%"></i>`;
+    }
+    grid+='</div>';
+  }
+  grid+='</div>';
+
+  let body='', now=new Date();
+  for(let si=0;si<STALLS.length;si++){
+    const processName=STALLS[si];
+    body+=`<div class="mrow" style="--days:${days}" data-process="${esc(processName)}">`;
+    for(let d=1;d<=days;d++){
+      const day=new Date(y,m,d),ds=new Date(y,m,d,8,0,0),de=new Date(y,m,d,16,30,0),bars=[];
+      plans.forEach(u=>(u.jobs||[]).forEach(j=>{
+        if(Number(j.stall)!==si+1)return;
+        const st=parseDate(j.start),en=parseDate(j.end);
+        if(!st||!en||en<=ds||st>=de)return;
+        const workWindow=de-ds;
+        const l=Math.max(0,(Math.max(st,ds)-ds)/workWindow*100);
+        const r=Math.min(100,(Math.min(en,de)-ds)/workWindow*100);
+        if(r<=l)return;
+        const pi=PROC.findIndex(p=>p[0]===j.process), lane=bars.length;
+        const left=Math.max(0,l), width=Math.max(1,r-l);
+        bars.push(`<div class="mbar p${pi}${searchHit(u.nopol)?' blink':''}" style="left:${left}%;width:${width}%;top:${8+lane*66}px" onclick="openPlan('${esc(u.nopol)}')" title="${esc(u.nopol)} | ${esc(j.process)} | ${fmt(j.start)} → ${fmt(j.end)}"><span class="plateText">${esc(u.nopol)}</span><span class="groupBadge">${esc(u.group||'-')}</span><span class="processText">${esc(j.process)}</span></div>`);
+      }));
+      const rowH=Math.max(82,Math.min(1600,16+Math.max(1,bars.length)*66));
+      body+=`<div class="cell ${day.getDay()===0?'sun':''}" style="--row-h:${rowH}px">${bars.join('')}</div>`;
+    }
+    body+='</div>';
+  }
+
+  let globalNow='';
+  if(now.getFullYear()===y && now.getMonth()===m && now.getHours()>=8 && (now.getHours()<16 || (now.getHours()===16&&now.getMinutes()<30)) && now.getDay()!==0){
+    const dayNo=now.getDate();
+    const mins=(now.getHours()*60+now.getMinutes()+now.getSeconds()/60)-480;
+    const pct=Math.max(0,Math.min(100,mins/510*100));
+    const left=((dayNo-1)*360)+(pct/100*360);
+    globalNow=`<div class="globalNowLine" style="left:${left}px"><span>NOW ${now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})}</span></div>`;
+  }
+  $('monthBoard').innerHTML=head+grid+body+globalNow;
+}
+function openPlan(nopol){let x=plans.find(z=>z.nopol===nopol);if(!x)return;$('modalTitle').textContent=x.nopol+' — SYSTEM PLAN #'+x.rank;$('modalBody').innerHTML=`<div class="summaryGrid"><div><b>GROUP</b><br>${esc(x.group)}</div><div><b>KERUSAKAN</b><br>${esc(mode(x))}</div><div><b>ACTUAL IN</b><br>${fmt(x.actualIn)}</div><div><b>EST FINISH</b><br>${fmt(x.janjiSelesai)}</div><div><b>PLAN START</b><br>${fmt(x.jobs[0]?.start)}</div><div><b>PLAN FINISH</b><br>${fmt(x.planFinish)}</div><div><b>SLACK</b><br>${x.slack.toFixed(1)} jam</div><div><b>CONTROLLER</b><br><span class="badge ${approvalState(x.nopol)==='APPROVED'?'safeB':'tightB'}">${approvalState(x.nopol)}</span></div></div><div class="controllerBar"><button class="approveBtn" onclick="setApproval('${esc(x.nopol)}','APPROVED')">✓ APPROVE PLAN</button><button class="revBtn" onclick="setApproval('${esc(x.nopol)}','PENDING')">↺ BATAL APPROVAL</button></div><h3>SETTING / REVISI PLAN PER PROSES</h3><div class="note">Controller mengubah <b>TANGGAL + JAM MULAI</b> dan <b>TANGGAL + JAM SELESAI</b> setiap proses. Durasi per proses: LIGHT <b>2 jam</b>, MEDIUM <b>4 jam</b>, HEAVY <b>6 jam</b> tetap menjadi acuan sistem dan <b>tidak diedit di sini</b>. Setelah perubahan tekan SIMPAN & HITUNG ULANG PLAN.</div>${x.jobs.map(j=>{const r=manualRevision(x.nopol,j.process)||{};const st=localInputValue(r.start||j.start),en=localInputValue(r.end||j.end);const id=x.nopol.replace(/[^a-zA-Z0-9]/g,'_')+'_'+j.process.replace(/[^a-zA-Z0-9]/g,'_');return `<div class="process"><b>${esc(j.process)}</b><span>STALL ${j.stall}</span><label><small>PLAN MULAI</small><input class="revDate" id="st_${id}" type="datetime-local" value="${st}"></label><label><small>PLAN SELESAI</small><input class="revDate" id="en_${id}" type="datetime-local" value="${en}"></label></div>`}).join('')}<div class="controllerBar"><button class="replanBtn" onclick="savePlanDates('${esc(x.nopol)}')">⚙ SIMPAN & HITUNG ULANG PLAN</button></div>`;$('modalBg').style.display='flex'}
+function savePlanDates(nopol){
+  const x=plans.find(z=>z.nopol===nopol); if(!x)return;
+  const draft=[];
+  for(const j of x.jobs){
+    const id=nopol.replace(/[^a-zA-Z0-9]/g,'_')+'_'+j.process.replace(/[^a-zA-Z0-9]/g,'_');
+    const st=$('st_'+id)?.value||'', en=$('en_'+id)?.value||'';
+    const ds=parseDate(st), de=parseDate(en);
+    if(!ds||!de||de<=ds){alert('Tanggal/jam '+j.process+' tidak valid. PLAN SELESAI harus setelah PLAN MULAI.');return}
+    draft.push({j,st:ds,en:de});
+  }
+  const actual=parseDate(x.actualIn), deadline=parseDate(x.janjiSelesai);
+  for(let i=0;i<draft.length;i++){
+    if(actual&&draft[i].st<actual){alert(draft[i].j.process+' tidak boleh sebelum ACTUAL IN.');return}
+    // Manual revision boleh melewati EST FINISH. EST FINISH hanya menjadi indikator RISK.
+    // Yang wajib dijaga adalah urutan antar proses: proses berikutnya tidak boleh dimulai
+    // sebelum proses sebelumnya selesai.
+    if(i>0&&draft[i].st<draft[i-1].en){alert(draft[i].j.process+' tidak boleh mulai sebelum proses sebelumnya selesai.');return}
+  }
+  for(const d of draft){const key=revKey(nopol,d.j.process);revisions[key]={start:d.st.toISOString(),end:d.en.toISOString(),updated:new Date().toISOString()};}
+  storageSet(REVISION_KEY,revisions);
+  plans=buildPlan(rows.filter(u=>eligible(u)&&mode(u)===currentDamage));
+  renderPlanning(); renderJSCB();
+  const updated=plans.find(z=>z.nopol===nopol);
+  if(updated)openPlan(nopol);
+  const toast=document.createElement('div');toast.className='manualSaved';toast.textContent='✓ PLAN BERHASIL DISIMPAN';document.body.appendChild(toast);setTimeout(()=>toast.remove(),1800);
+}
+function saveRevision(nopol,process,start,end){const key=revKey(nopol,process);revisions[key]={start:new Date(start).toISOString(),end:new Date(end).toISOString(),updated:new Date().toISOString()};storageSet(REVISION_KEY,revisions);}
+function setApproval(nopol,state){saveApproval(nopol,state);plans=buildPlan(rows.filter(u=>eligible(u)&&mode(u)===currentDamage));renderPlanning();renderJSCB();openPlan(nopol)}
+function closeModal(){$('modalBg').style.display='none'}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');$('PLANNING').style.display=id==='PLANNING'?'block':'none';$('JSCB').style.display=id==='JSCB'?'block':'none';if(id==='JSCB')renderJSCB()}
+function monthPrev(){monthDate.setMonth(monthDate.getMonth()-1);renderJSCB()}function monthNext(){monthDate.setMonth(monthDate.getMonth()+1);renderJSCB()}function monthToday(){monthDate=new Date(new Date().getFullYear(),new Date().getMonth(),1);renderJSCB()}
+function toggleTVMode(){
+  const on=document.body.classList.toggle('tv-mode');
+  const btn=$('tvModeBtn');
+  btn.textContent=on?'⛶ EXIT TV MODE':'📺 TV MODE';
+  if(on){
+    $('PLANNING').style.display='none';
+    $('JSCB').style.display='flex';
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    $('tabJscb').classList.add('active');
+    renderJSCB();
+    if(document.documentElement.requestFullscreen){document.documentElement.requestFullscreen().catch(()=>{});}
+  }else{
+    $('JSCB').style.display='block';
+    $('PLANNING').style.display='block';
+    $('tabPlanning').classList.add('active');
+    $('tabJscb').classList.remove('active');
+    if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});
+  }
+}
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&document.body.classList.contains('tv-mode')){document.body.classList.remove('tv-mode');$('tvModeBtn').textContent='📺 TV MODE';$('JSCB').style.display='none';$('PLANNING').style.display='block';$('tabPlanning').classList.add('active');$('tabJscb').classList.remove('active')}});
+loadData();setInterval(loadData,30000);
+</script>
+</body></html>
+
